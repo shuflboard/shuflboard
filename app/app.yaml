@@ -1,0 +1,18 @@
+application: tabletop-tryouts
+version: alpha-001
+runtime: go
+api_version: go1
+
+handlers:
+- url: /
+  static_files: static/index.html
+  upload: static/index.html
+- url: /js
+  static_dir: static/js
+- url: /css
+  static_dir: static/css
+- url: /assets
+  static_dir: static/assets
+
+- url: /(login|signup)
+  script: login
