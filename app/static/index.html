@@ -52,7 +52,7 @@
                   <li class="active"><a href="#">Home</a></li>
                   <li><a href="#">Plans</a></li>
                   <li><a href="#">Gift subscriptions</a></li>
-                  {{ if ne .ID "" }}
+                  {{ if . }}
                   <li><a href="account">My account</a></li>
                   <li><a href="logout">Log out</a></li>
                   {{ else }}
