@@ -1,32 +1,34 @@
 package app
 
 import (
-	"net/http"
 	"html/template"
-	"path"
+	"net/http"
 
 	"appengine"
 	"appengine/user"
 )
+
+var tmpl map[string]*template.Template;
 
 func init() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/signup", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
+
+	tmpl = make(map[string]*template.Template)
+	tmpl["index.html"] = template.Must(
+		template.ParseFiles("static/index.html", "static/base.html"))
+}
+
+func WriteStatic(w http.ResponseWriter, s string, u *user.User) {
+	if err := tmpl[s].ExecuteTemplate(w, "base", u); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func writeIndex(w http.ResponseWriter, u *user.User) {
-	fp := path.Join("static", "index.html")
-	tmpl, err := template.ParseFiles(fp)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	if err := tmpl.Execute(w, u); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+	WriteStatic(w, "index.html", u)
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
