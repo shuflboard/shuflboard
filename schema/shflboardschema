@@ -1,0 +1,96 @@
+
+CREATE TABLE Games 
+(
+	GameID BINARY(16) NOT NULL,
+	Name VARCHAR(255) NOT NULL,
+	Publisher VARCHAR(255) NOT NULL,
+	Designer VARCHAR(255),
+	Description BLOB,
+	Image BLOB,
+	BggRating DECIMAL(5,2),
+	Complexity DECIMAL(5,2),
+	MinNumPlayers TINYINT,
+	MaxNumPlayers TINYINT,
+    BestNumPlayers TINYINT,
+    MinAge TINYINT,
+    PlayTime SMALLINT(2),
+    Height Decimal(4,2),
+    Width Decimal(4,2),
+    Length Decimal(4,2),
+    Weight Decimal(4,2),
+    PRIMARY KEY (GameID)
+);
+
+CREATE TABLE GameInstances
+(
+	InstanceID BINARY(16) NOT NULL,
+	GameID BINARY(16) NOT NULL,
+	GameCondition ENUM('NEW', 'EXCELLENT', 'GOOD', 'FAIR', 'POOR'),
+	LoanedCount SMALLINT(2),
+	LastShipped DATE,
+	LastReturn DATE,
+	PRIMARY KEY (InstanceID),
+	FOREIGN KEY (GameID) REFERENCES Games(GameID)
+);
+
+CREATE TABLE Users
+(
+	UserID BINARY(16) NOT NULL,
+	Email VARCHAR(255) NOT NULL,
+	FirstName VARCHAR(255) NOT NULL,
+	LastName VARCHAR(255) NOT NULL,
+	PRIMARY KEY (UserID)
+);
+
+Create Table Tags
+(
+	TagName VARCHAR(255) NOT NULL,
+	PRIMARY KEY (TagName)
+);
+
+
+Create Table UserPreferences 
+(
+	UserID BINARY(16) NOT NULL,
+    Preferences JSON, # Structured field for each preference type. 
+    PRIMARY KEY (UserID)
+);
+
+
+Create Table GameTags 
+(
+	GameID BINARY(16),
+    TagName VARCHAR(255) NOT NULL,
+    PRIMARY KEY (GameID, TagName)
+);
+
+Create Table UserGames
+(
+	UserID BINARY(16) NOT NULL,
+	GameID BINARY(16) NOT NULL,
+	Rating DECIMAL(5,2),
+	PRIMARY KEY (UserID, GameID)
+);
+
+# TODO(wmd): Determine how to store these.
+CREATE FUNCTION UuidToBin(_uuid BINARY(36))
+        RETURNS BINARY(16)
+        LANGUAGE SQL  DETERMINISTIC  CONTAINS SQL  SQL SECURITY INVOKER
+    RETURN
+        UNHEX(CONCAT(
+            SUBSTR(_uuid, 15, 4),
+            SUBSTR(_uuid, 10, 4),
+            SUBSTR(_uuid,  1, 8),
+            SUBSTR(_uuid, 20, 4),
+            SUBSTR(_uuid, 25) ));
+
+CREATE FUNCTION UuidFromBin(_bin BINARY(16))
+        RETURNS BINARY(36)
+        LANGUAGE SQL  DETERMINISTIC  CONTAINS SQL  SQL SECURITY INVOKER
+    RETURN
+        LCASE(CONCAT_WS('-',
+            HEX(SUBSTR(_bin,  5, 4)),
+            HEX(SUBSTR(_bin,  3, 2)),
+            HEX(SUBSTR(_bin,  1, 2)),
+            HEX(SUBSTR(_bin,  9, 2)),
+            HEX(SUBSTR(_bin, 11)) ));
