@@ -6,6 +6,8 @@ api_version: go1
 handlers:
 - url: /
   script: login
+- url: /about
+  script: login
 - url: /js
   static_dir: static/js
 - url: /css
@@ -15,3 +17,5 @@ handlers:
 
 - url: /(login|signup|logout)
   script: login
+- url: /subscribe
+  script: buy

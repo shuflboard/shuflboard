@@ -1,17 +1,19 @@
 package app
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 
-	"appengine"
-	"appengine/user"
+	"google.golang.org/appengine"
+	"google.golang.org/appengine/user"
 )
 
 var tmpl map[string]*template.Template;
 
 func init() {
 	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/about", aboutHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/signup", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
@@ -19,6 +21,10 @@ func init() {
 	tmpl = make(map[string]*template.Template)
 	tmpl["index.html"] = template.Must(
 		template.ParseFiles("static/index.html", "static/base.html"))
+	tmpl["about.html"] = template.Must(
+		template.ParseFiles("static/about.html", "static/base.html"))
+	tmpl["subscribe.html"] = template.Must(
+		template.ParseFiles("static/subscribe.html", "static/base.html"))
 }
 
 func WriteStatic(w http.ResponseWriter, s string, u *user.User) {
@@ -27,14 +33,17 @@ func WriteStatic(w http.ResponseWriter, s string, u *user.User) {
 	}
 }
 
-func writeIndex(w http.ResponseWriter, u *user.User) {
-	WriteStatic(w, "index.html", u)
-}
-
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	u := user.Current(c)
-	writeIndex(w, u);
+	WriteStatic(w, "index.html", u)
+}
+
+func aboutHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("r url: %s", r.URL)
+	c := appengine.NewContext(r)
+	u := user.Current(c)
+	WriteStatic(w, "about.html", u)
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -50,7 +59,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusFound)
 		return
         }
-	writeIndex(w, u)
+	WriteStatic(w, "index.html", u)
 }
 
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
