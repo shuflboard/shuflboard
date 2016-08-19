@@ -27,7 +27,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusFound)
 		return
         }
-	WriteStatic(w, "index.html", u)
+	WriteStatic(w, "index.html", TemplateInfo{
+		User: u,
+		Path: "/subscribe",
+	})
 }
 
 func logoutHandler(w http.ResponseWriter, r *http.Request) {

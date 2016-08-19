@@ -25,7 +25,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	u := user.Current(ac)
 
 	if r.Method == "GET" {
-		WriteStatic(w, "subscribe.html", u)
+		WriteStatic(w, "subscribe.html", TemplateInfo{
+			User: u,
+			Path: "/subscribe",
+		})
 		log.Infof(ac, "key: %s", stripe.Key)
 		return
 	}

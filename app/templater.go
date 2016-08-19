@@ -32,8 +32,13 @@ func init() {
 		template.ParseFiles(path.Join(prefix, Subscribe), base))
 }
 
-func WriteStatic(w http.ResponseWriter, s string, u *user.User) {
-	if err := tmpl[s].ExecuteTemplate(w, "base", u); err != nil {
+type TemplateInfo struct {
+	User *user.User
+	Path string
+}
+
+func WriteStatic(w http.ResponseWriter, s string, ti TemplateInfo) {
+	if err := tmpl[s].ExecuteTemplate(w, "base", ti); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
@@ -41,11 +46,17 @@ func WriteStatic(w http.ResponseWriter, s string, u *user.User) {
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	u := user.Current(c)
-	WriteStatic(w, Index, u)
+	WriteStatic(w, Index, TemplateInfo{
+		User: u,
+		Path: r.URL.Path,
+	})
 }
 
 func aboutHandler(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 	u := user.Current(c)
-	WriteStatic(w, About, u)
+	WriteStatic(w, About, TemplateInfo{
+		User: u,
+		Path: r.URL.Path,
+	})
 }
