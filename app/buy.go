@@ -33,7 +33,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	// Stripe requires TLS 1.2, AppEngine defaults to TLS 1.0.
 	httpClient := &http.Client{
 		Transport: &http.Transport{
-			Proxy: http.ProxyFromEnvironment,
 			TLSClientConfig: &tls.Config{
 				MinVersion: tls.VersionTLS12,
 			},
