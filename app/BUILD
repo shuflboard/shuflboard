@@ -2,7 +2,11 @@ load("//skylark:go_appengine.bzl", "go_app")
 
 go_app(
     name = "app",
-    srcs = glob(["*.go"]),
+    srcs = [
+        "buy.go",
+        "login.go",
+        "templater.go",
+    ],
     config = ":yaml",
     data = glob(["static/**"]),
 )
