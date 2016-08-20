@@ -10,8 +10,6 @@
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
     <link href="css/cover.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -20,16 +18,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]-->
     <link href='https://fonts.googleapis.com/css?family=Nixie+One' rel='stylesheet' type='text/css'>
-    <link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
     <style type="text/css">
-      #mc_embed_signup{clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
-      .full {
-      background: url('assets/gencon-edited.jpg') no-repeat center center fixed;
-      -webkit-background-size: cover;
-      -moz-background-size: cover;
-      background-size: cover;
-      -o-background-size: cover;
-      }
       h1, h2, h3, h4, h5, h6 {
         font-family: 'Nixie One';
       }
@@ -37,6 +26,7 @@
         font-family: 'Nixie One';
       }
     </style>
+    {{ template "head" . }}
   </head>
 
   <body class="full">
@@ -45,7 +35,7 @@
         <div class="cover-container">
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand">Shuflboard</h3>
+              <h3 class="masthead-brand"><a href="/">Shuflboard</a></h3>
               <nav>
                 <ul class="nav masthead-nav">
                   <li {{ if eq .Path "/" }}class="active"{{ end }}>
